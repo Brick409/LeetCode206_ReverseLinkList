@@ -65,7 +65,7 @@ void deleteListNode(ListNode *head)
     return;
 }
 
-//定义三个不同的节点指针
+//定义三个不同的节点指针，反转链表
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
@@ -82,12 +82,15 @@ public:
 
         return pre;
     }
+    /*83号问题：
+    给出一个有序链表，删除其中所有重复元素，使得每个元素只保留一次。*/
+    ListNode* deleteDuplicates(ListNode* head) {
+        
+    }
+
 };
 
 /*
-83号问题：
-    给粗一个有序链表，删除其中所有重复元素，使得每个元素只保留一次
-
 86号问题：
     给出一个链表以及一个数X，将链表重新整理，使得小于x的元素在前；大于等于x的元素在后；
 
@@ -117,9 +120,13 @@ int _tmain(int argc, _TCHAR* argv[])
     int n = sizeof(arr) / sizeof(int);
 
     ListNode *pHead = CreatList(arr, n);
+
     printLinkList(pHead);
+
     cout << endl;
+
     ListNode *pCurAfterReverse = Solution().reverseList(pHead);
+
     printLinkList(pCurAfterReverse);
 
     deleteListNode(pCurAfterReverse);
