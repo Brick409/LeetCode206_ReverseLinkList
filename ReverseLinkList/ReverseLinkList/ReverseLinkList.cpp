@@ -17,7 +17,6 @@ struct ListNode {
 
 
 //通过一个数组创建一个链表,其中n为需要创建的链表节点个数
-
 ListNode * CreatList(int arr[], int n)
 {
     if (n == 0)
@@ -85,7 +84,33 @@ public:
     /*83号问题：
     给出一个有序链表，删除其中所有重复元素，使得每个元素只保留一次。*/
     ListNode* deleteDuplicates(ListNode* head) {
-        
+        ListNode *pCur = NULL;
+        ListNode *pNext = NULL;
+
+        if (head==NULL|| head->next==NULL)
+        {
+            return head;
+        }
+
+        pCur = head;
+        pNext = head->next;
+
+        while (pNext!=NULL)
+        {
+            if (pNext->val > pCur->val)
+            {
+                pCur->next = pNext;
+                pCur = pNext;
+                pNext = pNext->next;
+            }
+            else
+            {
+                pNext = pNext->next;
+                pCur->next = pNext;
+            }
+        }
+
+        return head;
     }
 
     /* 已知两个链表head1 和head2 各自有序（从小到大），
@@ -246,6 +271,12 @@ int _tmain(int argc, _TCHAR* argv[])
     ListNode * mergeHead = Solution().mergeTwoList1(pHead1, pHead2);
 
     printLinkList(mergeHead);
+
+    cout << endl;
+
+    ListNode * printHead = Solution().deleteDuplicates(mergeHead);
+
+    printLinkList(printHead);
 
 
     system("pause");
