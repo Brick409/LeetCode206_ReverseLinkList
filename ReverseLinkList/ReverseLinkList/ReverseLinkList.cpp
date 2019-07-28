@@ -88,6 +88,103 @@ public:
         
     }
 
+    /* 已知两个链表head1 和head2 各自有序（从小到大），
+       请把它们合并成一个链表依然有序。(保留所有结点，即便大小相同）*/
+    ListNode * mergeTwoList1(ListNode *head1,ListNode *head2)
+    {
+        ListNode *head = NULL;
+        ListNode *pCurNode = NULL; //表示正在处理节点
+
+        ListNode *p1 = NULL; //指向链表1待比较的节点
+        ListNode *p2 = NULL; //指向链表2待比较的节点
+
+        if (head1==NULL)
+        {
+            return head2;
+        }
+
+        if (head2 == NULL)
+        {
+            return head1;
+        }
+
+        if ((head1->val)<(head2->val))
+        {
+            head = head1;
+            p1 = head1->next;
+            p2 = head2;
+        }
+        else
+        {
+            head = head2;
+            p1 = head1;
+            p2 = head2->next;
+        }
+
+        pCurNode = head;
+
+        //当前待比较两个节点非空
+        while ((p1!=NULL)&&(p2!=NULL))
+        {
+            if ((p1->val) < (p2->val))
+            {
+                pCurNode->next = p1;
+                pCurNode = p1;
+                p1 = p1->next;
+            } 
+            else
+            {
+                pCurNode->next = p2;
+                pCurNode = p2;
+                p2 = p2->next;
+            }
+        }
+
+        if (p1!=NULL)
+        {
+            pCurNode->next = p1;
+        }
+
+        if (p2 != NULL)
+        {
+            pCurNode->next = p2;
+        }
+
+        return head;
+    }
+
+    /*
+        已知两个链表head1 和head2 各自有序(从小到大)，
+        请把它们合并成一个链表依然有序，这次要求用递归方法进行。(Autodesk)
+    */
+    ListNode * mergeTwoList2(ListNode * head1, ListNode * head2)
+    {
+        ListNode *head = NULL;
+
+        if (head1==NULL)
+        {
+            return head2;
+        }
+
+        if (head2 == NULL)
+        {
+            return head1;
+        }
+
+        if (head1->val < head2->val)
+        {
+            head = head1;
+            head->next = mergeTwoList2(head1->next, head2);
+        }
+        else
+        {
+            head = head2;
+            head->next = mergeTwoList2(head1, head2->next);
+        }
+
+        return head;
+    }
+
 };
 
 /*
@@ -115,21 +212,41 @@ public:
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-    int arr[] = { 1, 2, 3, 4, 5 };
+    int arr1[] = { 1, 2, 3, 4, 5 };
 
-    int n = sizeof(arr) / sizeof(int);
+    int arr2[] = { 0, 3, 5, 7, 9 };
 
-    ListNode *pHead = CreatList(arr, n);
+    int n1 = sizeof(arr1) / sizeof(int);
 
-    printLinkList(pHead);
+    ListNode *pHead1 = CreatList(arr1, n1);
+
+
+    int n2 = sizeof(arr2) / sizeof(int);
+
+    ListNode *pHead2 = CreatList(arr2, n2);
+
+
+    printLinkList(pHead1);
 
     cout << endl;
 
-    ListNode *pCurAfterReverse = Solution().reverseList(pHead);
 
-    printLinkList(pCurAfterReverse);
+    printLinkList(pHead2);
 
-    deleteListNode(pCurAfterReverse);
+    cout << endl;
+
+
+    //ListNode *pCurAfterReverse = Solution().reverseList(pHead);
+
+    //printLinkList(pCurAfterReverse);
+
+    //deleteListNode(pCurAfterReverse);
+
+
+    ListNode * mergeHead = Solution().mergeTwoList1(pHead1, pHead2);
+
+    printLinkList(mergeHead);
+
 
     system("pause");
 
