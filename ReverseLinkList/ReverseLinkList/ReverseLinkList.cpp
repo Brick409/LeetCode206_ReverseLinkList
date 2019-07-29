@@ -1,3 +1,4 @@
+
 // ReverseLinkList.cpp : 定义控制台应用程序的入口点。
 //
 
@@ -209,12 +210,60 @@ public:
 
         return head;
     }
+	/*
+	86号问题：
+	给出一个链表以及一个数X，将链表重新整理，使得小于x的元素在前；大于等于x的元素在后；
+	Input: head = 1->4->3->2->5->2, x = 3
+	Output: 1->2->2->4->3->5
+	*/
+	ListNode* partition(ListNode* head, int x) {
+		//新建一个链表节点，用于存储大于X值的链表节点
+		//NEW结构体必须初始化
+
+		if (head==NULL||head->next==NULL)
+		{
+			return head;
+		}
+
+		ListNode *tempNode = new ListNode(0);
+
+		ListNode *newNode = tempNode; //指向新链表的末尾节点
+
+		ListNode *curNode = head; //当前待处理的结点
+		ListNode *preNode = head; //当前待处理的结点的前一个节点
+
+		while (curNode != NULL)
+		{
+			//当前节点的值大于X，然后将该节点挂在temp结点对应链表之后
+			if (curNode->val >= x)
+			{
+				newNode->next = curNode;
+				newNode = curNode;
+				curNode = curNode->next;
+				preNode->next = curNode;
+				preNode = preNode->next;
+			}
+			else
+			{
+				preNode = curNode;
+				curNode = curNode->next;
+			}
+		}
+
+		preNode->next = tempNode->next;
+
+		newNode->next = NULL;
+
+		delete[] tempNode;
+		tempNode = NULL;
+
+		return head;
+	}
 
 };
 
 /*
-86号问题：
-    给出一个链表以及一个数X，将链表重新整理，使得小于x的元素在前；大于等于x的元素在后；
+
 
 328题目：
     给出一个链表，将链表重新整理，使得所有索引为奇数的节点排在所因为偶数的节点前面；
@@ -239,7 +288,9 @@ int _tmain(int argc, _TCHAR* argv[])
 {
     int arr1[] = { 1, 2, 3, 4, 5 };
 
-    int arr2[] = { 0, 3, 5, 7, 9 };
+    int arr2[] = { 1, 4, 3, 2, 5, 2 };
+
+	int x = 3;
 
     int n1 = sizeof(arr1) / sizeof(int);
 
@@ -268,16 +319,19 @@ int _tmain(int argc, _TCHAR* argv[])
     //deleteListNode(pCurAfterReverse);
 
 
-    ListNode * mergeHead = Solution().mergeTwoList1(pHead1, pHead2);
+    //ListNode * mergeHead = Solution().mergeTwoList1(pHead1, pHead2);
 
-    printLinkList(mergeHead);
+    //printLinkList(mergeHead);
 
-    cout << endl;
+    //cout << endl;
 
-    ListNode * printHead = Solution().deleteDuplicates(mergeHead);
+    //ListNode * printHead = Solution().deleteDuplicates(mergeHead);
 
-    printLinkList(printHead);
+    //printLinkList(printHead);
 
+	ListNode * printHead = Solution().partition(pHead2, x);
+
+	printLinkList(printHead);
 
     system("pause");
 
