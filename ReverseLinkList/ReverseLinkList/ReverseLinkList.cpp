@@ -216,7 +216,77 @@ public:
 	Input: head = 1->4->3->2->5->2, x = 3
 	Output: 1->2->2->4->3->5
 	*/
+	/* 通过设立4个指针的方式，分别指向小于x的结点组成的链表，大于X的节点的链表 */
 	ListNode* partition(ListNode* head, int x) {
+		//新建一个链表节点，用于存储大于X值的链表节点
+		//NEW结构体必须初始化
+
+		if (head == NULL || head->next == NULL)
+		{
+			return head;
+		}
+
+		ListNode *smallHeadNode = NULL; //指向小于X的节点组成的链表的首节点
+		ListNode *smallTailNode = NULL; //指向小于X的节点组成的链表的尾节点
+		ListNode *bigHeadNode = NULL; //指向大于X的节点组成的链表的首节点
+		ListNode *bigTailNode = NULL; //指向大于X的节点组成的链表的尾节点
+
+		ListNode *curNode = head;  //当前待处理的节点
+
+		while (curNode != NULL)
+		{
+			//当前节点的值大于X，然后将该节点挂在temp结点对应链表之后
+			if (curNode->val < x)
+			{
+				if (NULL == smallTailNode)
+				{
+					smallHeadNode = curNode;
+					smallTailNode = curNode;
+				}
+				else
+				{
+					smallTailNode->next = curNode;
+					smallTailNode = curNode;
+				}
+
+			}
+			else
+			{
+				if (NULL == bigTailNode)
+				{
+					bigHeadNode = curNode;
+					bigTailNode = curNode;
+				}
+				else
+				{
+					bigTailNode->next = curNode;
+					bigTailNode = curNode;
+				}
+			}
+
+			curNode = curNode->next;
+		}
+
+		//针对原链表中数值均大于x的情况
+		if (NULL == smallHeadNode)
+		{
+			return bigHeadNode;
+		}
+		//针对原链表中数值均小于x的情况
+		if (NULL == bigHeadNode)
+		{
+			return smallHeadNode;
+		}
+
+		smallTailNode->next = bigHeadNode;
+
+		bigTailNode->next = NULL;
+
+		return smallHeadNode;
+	}
+
+	/* 以下算法超时，具体原因不清楚 */
+	ListNode* partition1(ListNode* head, int x) {
 		//新建一个链表节点，用于存储大于X值的链表节点
 		//NEW结构体必须初始化
 
@@ -238,10 +308,11 @@ public:
 			if (curNode->val >= x)
 			{
 				newNode->next = curNode;
+				preNode->next = curNode->next;
+
 				newNode = curNode;
 				curNode = curNode->next;
-				preNode->next = curNode;
-				preNode = preNode->next;
+		
 			}
 			else
 			{
@@ -290,7 +361,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
     int arr2[] = { 1, 4, 3, 2, 5, 2 };
 
-	int x = 3;
+	int x = 6;
 
     int n1 = sizeof(arr1) / sizeof(int);
 
