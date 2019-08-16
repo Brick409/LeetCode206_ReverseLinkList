@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include <string>
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
@@ -330,36 +331,146 @@ public:
 
 		return head;
 	}
+	/*
+	328题目：
+	给出一个链表，将链表重新整理，使得所有索引为奇数的节点排在所因为偶数的节点前面；
+	*/
+	ListNode* oddEvenList(ListNode* head) {
+		ListNode *oddCur = head;  //当前奇数节点
 
+		ListNode *evenTempHead = NULL; //用作临时节点，存放偶数节点的头节点
+
+		ListNode *evenCur = NULL; //当前偶数节点
+
+
+		if (head==NULL||head->next==NULL)
+		{
+			return head;
+		}
+
+		evenTempHead = head->next;
+		evenCur = head->next;
+
+		//注意以下逻辑判断，evenCur结点至少为倒数第二个节点，再进行处理
+
+		while (evenCur != NULL && evenCur->next != NULL)
+		{
+			oddCur->next = oddCur->next->next;
+			evenCur->next = evenCur->next->next;
+
+			oddCur = oddCur->next;
+			evenCur = evenCur->next;
+		}
+
+		oddCur->next = evenTempHead;
+
+		return head;
+	}
+	/*
+	链表问题：一般设立链表的虚拟头节点方便解题
+
+	203号问题：
+	在链表中删除指定结点，即值为val的节点。
+	Input:  1->2->6->3->4->5->6, val = 6
+	Output: 1->2->3->4->5
+	*/
+
+	ListNode* removeElements(ListNode* head, int val) {
+		
+		ListNode *curNode = head;
+		ListNode *preNode = head;
+
+		if (head==NULL)
+		{
+			return head;
+		}
+
+		//针对待处理的一个结点等于val的场景特殊处理
+
+		while (head!=NULL && head->val==val)
+		{
+			head = head->next;
+		}
+
+		while (curNode!=NULL)
+		{
+			if (curNode->val == val)
+			{
+				preNode->next = curNode->next;	
+			}
+			else
+			{
+				preNode = curNode;
+			}
+			curNode = curNode->next;
+
+		}
+
+
+		return head;
+
+	}
+	/*
+	445号问题：
+	给出两个非空链表，表示两个非负整数。其中每一个整数的各位数字以逆序存储，返回这两个整数相加所代表的链表。
+	Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
+	Output: 7 -> 8 -> 0 -> 7
+	*/
+
+	ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+		/*
+		使用两个栈来辅助运算。
+		*/
+		stack<int> s1, s2;
+		//将L1中数据存入S1，L2中数据存入S2
+		while (l1!=NULL)
+		{
+			s1.push(l1->val);
+			l1 = l1->next;
+		}
+
+		while (l2!=NULL)
+		{
+			s2.push(l2->val);
+			l2 = l2->next;
+		}
+
+		int carry = 0; //表示相加的进位数
+		int numSum = 0; //临时存放两个结点中数字之和
+
+		//循环条件为进位非空、S1栈非空、S2栈非空
+		while (carry || (!s1.empty()) || (!s2.empty()))
+		{
+			numSum = carry;
+			
+			if (!s1.empty())
+			{
+				numSum += s1.top();
+				s1.pop();
+			}
+
+			if (!s2.empty())
+			{
+				numSum += s2.top();
+				s2.pop();
+			}
+
+			
+
+		}
+
+
+
+	}
 };
 
-/*
-
-
-328题目：
-    给出一个链表，将链表重新整理，使得所有索引为奇数的节点排在所因为偶数的节点前面；
-2号问题：
-    给出两个飞控链表，表示两个非负整数。其中每一个整数的各位数字以逆序存储，返回这两个整数相加所代表的链表。
-
-445题目：
-*/
-
-/*
-链表问题：一般设立链表的虚拟头节点方便解题
-
-203号问题：
-    在链表中删除值为val的节点。
-
-
-
-*/
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
     int arr1[] = { 1, 2, 3, 4, 5 };
 
-    int arr2[] = { 1, 4, 3, 2, 5, 2 };
+    int arr2[] = { 1, 4, 6, 3, 6, 2, 5, 2 };
 
 	int x = 6;
 
@@ -400,7 +511,10 @@ int _tmain(int argc, _TCHAR* argv[])
 
     //printLinkList(printHead);
 
-	ListNode * printHead = Solution().partition(pHead2, x);
+	//ListNode * printHead = Solution().removeElements(pHead2, x);
+
+
+
 
 	printLinkList(printHead);
 
