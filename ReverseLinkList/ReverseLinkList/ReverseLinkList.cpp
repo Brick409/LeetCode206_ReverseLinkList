@@ -458,16 +458,15 @@ public:
 				s2.pop();
 			}
 			//新建立一个节点，用于存放相加后对应位置的数值
-			tempNode = new ListNode(numSum / 10);
+			tempNode = new ListNode(numSum%10);
 			
 			tempNode->next = lastNode;
 			lastNode = tempNode;
 			
 			//相加后的新的进位赋值给carry
-			carry = numSum % 10;
+			carry = numSum/10;
 
 		}
-
 
 		return lastNode;
 	}
