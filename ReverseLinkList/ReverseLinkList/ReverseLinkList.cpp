@@ -435,8 +435,11 @@ public:
 			l2 = l2->next;
 		}
 
-		int carry = 0; //表示相加的进位数
+		int carry = 0; //表示相加后的进位数
 		int numSum = 0; //临时存放两个结点中数字之和
+
+		ListNode *tempNode = nullptr; //用来临时存放结点内容
+		ListNode *lastNode = nullptr; //指向最终新建立的链表的首结点
 
 		//循环条件为进位非空、S1栈非空、S2栈非空
 		while (carry || (!s1.empty()) || (!s2.empty()))
@@ -454,13 +457,19 @@ public:
 				numSum += s2.top();
 				s2.pop();
 			}
-
+			//新建立一个节点，用于存放相加后对应位置的数值
+			tempNode = new ListNode(numSum / 10);
 			
+			tempNode->next = lastNode;
+			lastNode = tempNode;
+			
+			//相加后的新的进位赋值给carry
+			carry = numSum % 10;
 
 		}
 
 
-
+		return lastNode;
 	}
 };
 
